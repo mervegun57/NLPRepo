@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify
 from models import deneme
 from flask_cors import CORS
+import spacy
+from spacy import displacy
+from spacy.lang.en.examples import sentences
+
 
 app = Flask(__name__)
 CORS(app)
@@ -10,7 +14,7 @@ deneme = deneme.Deneme()
 
 @app.route('/deneme/', methods=['GET'])
 def get_tasks():
-    return jsonify(deneme.find({})), 200
+    return jsonify(deneme.ner()), 200
 
 
 @app.route('/deneme/<string:deneme_id>/', methods=['GET'])
