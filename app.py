@@ -10,11 +10,19 @@ app = Flask(__name__)
 CORS(app)
 
 deneme = deneme.Deneme()
+nlp = spacy.load('en_core_web_sm')
 
-
-@app.route('/ner/', methods=['GET'])
+@app.route('/trainData', methods=['GET'])
 def get_tasks():
-    return jsonify(deneme.ner()), 200
+    return jsonify(deneme.ner(nlp)), 200
+
+@app.route('/tweetData', methods=['GET'])
+def get_tasks(nlp):
+    return jsonify(deneme.tweetData(nlp)), 200
+
+@app.route('/findData', methods=['POST'])
+def get_tasks(nlp):
+    return jsonify(deneme.findData(nlp, request.json)), 200
 
 
 @app.route('/deneme/<string:deneme_id>/', methods=['GET'])
@@ -22,13 +30,12 @@ def get_task(deneme_id):
     return deneme.find_by_id(deneme_id), 200
 
 
-@app.route('/deneme/', methods=['POST'])
+@app.route('/deneme/', methods=['GET'])
 def add_tasks():
-    if request.method == "POST":
-        title = request.form['title']
-        body = request.form['body']
-        response = deneme.create({'title': title, 'body': body})
-        return response, 201
+        # title = request.form['title']
+        # body = request.form['body']
+    #response = deneme.create()
+    return jsonify(deneme.create()), 201
 
 
 @app.route('/deneme/<string:deneme_id>/', methods=['PUT'])
